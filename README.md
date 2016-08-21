@@ -1,10 +1,10 @@
-# ansible playbook for lets encrypt certificate
+# let's encrypt 証明書を取得する ansible playbook
 
-## description
+## 概要
 
 リモートホスト上で nginx を起動し、let's encrypt のサーバ証明書を取得するための playbook です。
 
-## requirements
+## 必要要件
 
 * リモートホスト
   * OS: Ubuntu 16.04 (xenial)
