@@ -1,0 +1,8 @@
+#!/bin/sh
+
+{{ certbot_path }}/certbot-auto renew \
+  --no-self-upgrade \
+  -n \
+  --force-renewal
+
+/usr/sbin/nginx -s reload

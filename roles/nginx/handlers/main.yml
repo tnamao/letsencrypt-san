@@ -1,0 +1,6 @@
+---
+- name: restarted nginx
+  service: name=nginx state=restarted enabled=true
+
+- name: reload nginx
+  command: /usr/sbin/nginx -s reload

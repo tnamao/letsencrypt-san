@@ -1,0 +1,25 @@
+---
+- name: stats /etc/letsencrypt/live/{{ cert_hostname[0] }}/fullchain.pem
+  stat: path=/etc/letsencrypt/live/{{ cert_hostname[0] }}/fullchain.pem
+  register: ssl_cert
+
+- name: create new certificate
+  command: >
+    {{ certbot_path }}/certbot-auto certonly
+      --no-self-upgrade
+      -n
+      --webroot
+      --agree-tos
+      --email {{ cert_email }}
+      -w {{ letsencrypt_root }}
+      {{ lookup('template', 'cert_domains.j2') }}
+  when: not ssl_cert.stat.exists
+
+- name: renewal certificate
+  command: >
+    {{ certbot_path }}/certbot-auto renew
+      --no-self-upgrade
+      -n
+      --force-renewal
+  when: ssl_cert.stat.exists
+

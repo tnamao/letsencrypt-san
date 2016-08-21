@@ -1,0 +1,7 @@
+---
+- hosts: webserver
+  remote_user: root
+  vars_files:
+    - vars/common.yml
+  roles:
+    - cron

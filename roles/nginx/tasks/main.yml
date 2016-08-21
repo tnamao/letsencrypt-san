@@ -1,0 +1,48 @@
+---
+- name: install nginx
+  apt: pkg=nginx state=latest
+
+- name: template mysite.conf.j2
+  template:
+    src=mysite.conf.j2
+    dest=/etc/nginx/sites-available/mysite.conf
+
+- name: enable mysite.conf
+  file:
+    src=/etc/nginx/sites-available/mysite.conf
+    dest=/etc/nginx/sites-enabled/mysite.conf
+    state=link
+
+- name: template secure_mysite.conf.j2
+  template:
+    src=secure_mysite.conf.j2
+    dest=/etc/nginx/sites-available/secure_mysite.conf
+
+- name: create letsencrypt root
+  file:
+    path={{ letsencrypt_root }}
+    state=directory
+    recurse=true
+
+- name: stats /etc/letsencrypt/live/{{ cert_hostname[0] }}/fullchain.pem
+  stat: path=/etc/letsencrypt/live/{{ cert_hostname[0] }}/fullchain.pem
+  register: ssl_cert
+
+- name: enable secure_mysite.conf
+  file:
+    src=/etc/nginx/sites-available/secure_mysite.conf
+    dest=/etc/nginx/sites-enabled/secure_mysite.conf
+    state=link
+  when: ssl_cert.stat.exists
+
+- name: disable secure_mysite.conf
+  file:
+    path=/etc/nginx/sites-enabled/secure_mysite.conf
+    state=absent
+  when: not ssl_cert.stat.exists
+
+- name: restarted and enabled nginx
+  command: /bin/true
+  notify:
+    - restarted nginx
+    - reload nginx

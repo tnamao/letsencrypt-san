@@ -1,0 +1,18 @@
+server {
+    listen 80;
+    server_name{% for item in cert_hostname %} {{ item }}{% endfor %};
+
+    root /var/www/html;
+
+    location /.well-known/ {
+        root {{ letsencrypt_root }};
+    }
+
+    location / {
+        # First attempt to serve request as file, then
+        # as directory, then fall back to displaying a 404.
+        try_files $uri $uri/ =404;
+    }
+
+}
+

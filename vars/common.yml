@@ -1,0 +1,10 @@
+---
+cert_email: admin@your.domain
+letsencrypt_root: /var/www/letsencrypt_root
+certbot_path: /opt/certbot
+cert_hostname:
+  - your.common.name
+  - alias.common.name
+
+shellscript_path: /opt/shellscripts
+

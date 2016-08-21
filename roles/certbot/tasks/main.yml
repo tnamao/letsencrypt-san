@@ -1,0 +1,12 @@
+---
+- name: create certbot directory
+  file: path={{ certbot_path }}
+        state=directory
+        recurse=yes
+
+- name: download certbot-auto
+  get_url: 
+    url=https://dl.eff.org/certbot-auto
+    dest={{ certbot_path }}/certbot-auto
+    mode=0755
+

@@ -1,0 +1,8 @@
+---
+- name: Install requirement modules
+  command: apt-get -y install {{ item }}
+  with_items:
+    - aptitude
+
+- name: Upgrade installed modules
+  apt: update_cache=yes upgrade=yes

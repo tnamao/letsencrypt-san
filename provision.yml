@@ -1,0 +1,17 @@
+---
+- name: bootstrap python 2.7
+  hosts: webserver
+  remote_user: root
+  gather_facts: no
+  tasks:
+    - raw: >
+        apt-get update -qq && apt-get install -qq python2.7
+      become: yes
+
+- hosts: webserver
+  remote_user: root
+  vars_files:
+    - vars/common.yml
+  roles:
+    - apt
+    - nginx

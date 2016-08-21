@@ -1,0 +1,21 @@
+---
+- name: create {{ shellscript_path }}
+  file:
+    path={{ shellscript_path }}
+    state=directory
+    recurse=true
+
+- name: template renewal_certificate.sh.j2
+  template:
+    src=renewal_certificate.sh.j2
+    dest="{{ shellscript_path }}/renewal_certificate.sh"
+    mode=755
+
+- name: register renewal certificate job
+  cron:
+    name="renewal certificate"
+    minute="0"
+    hour="22"
+    day="10"
+    month="*/2"
+    job="{{ shellscript_path }}/renewal_certificate.sh"
